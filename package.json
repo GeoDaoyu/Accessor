@@ -1,0 +1,16 @@
+{
+  "name": "@geodaoyu/accessor",
+  "version": "1.0.0",
+  "description": "Implement esri/core/Accessor by myself.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Accessor",
+    "Esri",
+    "ArcGIS"
+  ],
+  "author": "GeoDaoyu",
+  "license": "MIT"
+}
