@@ -4,7 +4,7 @@
   "description": "Implement esri/core/Accessor by myself.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [
     "Accessor",
@@ -12,5 +12,9 @@
     "ArcGIS"
   ],
   "author": "GeoDaoyu",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^8.3.2",
+    "typescript": "^4.2.4"
+  }
 }
