@@ -12,6 +12,16 @@ interface WatchHandle extends Object {
   remove(): void;
 }
 
+interface Handle {
+  path: string;
+  callback: Function;
+}
+
+/**
+ * observe class
+ * @param cls class
+ * @returns Proxy
+ */
 function observe(cls) {
   return new Proxy(cls, {
     construct(target, args) {
@@ -33,7 +43,7 @@ function observe(cls) {
 
 class Accessor {
   declaredClass: string;
-  private _handles: Set<any>;
+  private _handles: Set<Handle>;
 
   constructor(props: object) {
     for (let prop in props) {
@@ -71,20 +81,42 @@ class Accessor {
 
     return this;
   }
-  watch(path: string, callback: WatchCallback): WatchHandle {
-    const dotIndex = path.indexOf(".");
-    if (dotIndex !== -1) {
-      const key = path.slice(0, dotIndex);
-      const value = path.slice(dotIndex + 1);
-      return this[key].watch(value, callback);
+  watch(path: string | string[], callback: WatchCallback): WatchHandle {
+    const handles = [];
+    const pathArray = [];
+    if (typeof path === "object") {
+      pathArray.push(...path);
     }
-    const handle = {
-      path,
-      callback,
-    };
-    this._handles.add(handle);
+    if (typeof path === "string") {
+      if (path.includes(",")) {
+        pathArray.push(...path.replace(" ", "").split(","));
+      } else {
+        pathArray.push(path);
+      }
+    }
+    pathArray.forEach((item) => {
+      let handle;
+      const dotIndex = item.indexOf(".");
+      if (dotIndex !== -1) {
+        const key = item.slice(0, dotIndex);
+        const value = item.slice(dotIndex + 1);
+        handle = this[key].watch(value, callback);
+      } else {
+        handle = {
+          path: item,
+          callback,
+        };
+      }
+      handles.push(handle);
+      this._handles.add(handle);
+    });
+
     const watchHandle = {
-      remove: () => this._handles.delete(handle),
+      remove: () => {
+        handles.forEach((handle) => {
+          this._handles.delete(handle);
+        });
+      },
     };
     return watchHandle;
   }

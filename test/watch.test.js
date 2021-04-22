@@ -39,6 +39,58 @@ describe("#watch()", function () {
     ]);
   });
   /**
+   * 一个callback监听多个属性, 字符串形式
+   */
+  it("watch multiple propertys change in string", function () {
+    const result = [];
+    const callback = (newValue, oldValue, propertyName, target) => {
+      result.push(newValue, oldValue, propertyName, target);
+    };
+    const view = new Accessor({
+      zoom: 12,
+      scale: 144447.638572,
+    });
+    view.watch("zoom, scale", callback);
+    view.zoom = 11;
+    view.scale = 288895.277144;
+    assert.deepStrictEqual(result, [
+      11,
+      12,
+      "zoom",
+      view,
+      288895.277144,
+      144447.638572,
+      "scale",
+      view,
+    ]);
+  });
+  /**
+   * 一个callback监听多个属性, 数组形式
+   */
+  it("watch multiple propertys change in string array", function () {
+    const result = [];
+    const callback = (newValue, oldValue, propertyName, target) => {
+      result.push(newValue, oldValue, propertyName, target);
+    };
+    const view = new Accessor({
+      zoom: 12,
+      scale: 144447.638572,
+    });
+    view.watch(["zoom", "scale"], callback);
+    view.zoom = 11;
+    view.scale = 288895.277144;
+    assert.deepStrictEqual(result, [
+      11,
+      12,
+      "zoom",
+      view,
+      288895.277144,
+      144447.638572,
+      "scale",
+      view,
+    ]);
+  });
+  /**
    * 调用remove方法移除handle,callback将不执行
    */
   it("remove watch handle", function () {
