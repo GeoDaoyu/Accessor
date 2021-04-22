@@ -13,6 +13,7 @@
   ],
   "author": "GeoDaoyu",
   "license": "MIT",
+  "type": "module",
   "devDependencies": {
     "mocha": "^8.3.2",
     "typescript": "^4.2.4"

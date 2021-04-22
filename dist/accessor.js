@@ -16,7 +16,7 @@ function observe(cls) {
         },
     });
 }
-class MyClass {
+class Accessor {
     constructor(props) {
         if (typeof props === 'object') {
             for (let prop in props) {
@@ -31,7 +31,7 @@ class MyClass {
         if (dotIndex !== -1) {
             const key = path.slice(0, dotIndex);
             const value = path.slice(dotIndex + 1);
-            return this[key].get(value);
+            return this[key] && this[key].get(value);
         }
         return this[path];
     }
@@ -65,5 +65,4 @@ class MyClass {
         };
     }
 }
-const Accessor = observe(MyClass);
-export default Accessor;
+export default observe(Accessor);

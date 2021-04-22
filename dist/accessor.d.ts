@@ -1,2 +1,2 @@
-declare const Accessor: any;
-export default Accessor;
+declare const _default: any;
+export default _default;

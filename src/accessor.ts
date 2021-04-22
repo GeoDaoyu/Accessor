@@ -17,7 +17,7 @@ function observe(cls) {
   });
 }
 
-class MyClass {
+class Accessor {
   public declaredClass: string;
   private _handles: Set<any>;
   constructor(props) {
@@ -34,7 +34,7 @@ class MyClass {
     if (dotIndex !== -1) {
       const key = path.slice(0, dotIndex);
       const value = path.slice(dotIndex + 1);
-      return this[key].get(value);
+      return this[key] && this[key].get(value);
     }
     return this[path];
   }
@@ -68,5 +68,4 @@ class MyClass {
   }
 }
 
-const Accessor = observe(MyClass);
-export default Accessor;
+export default observe(Accessor);
