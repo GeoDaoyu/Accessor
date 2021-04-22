@@ -1,16 +1,13 @@
 export class Accessor {
   constructor(obj?: any);
 
-  destroyed: boolean;
-  initialized: boolean;
   declaredClass: string;
-  destroy(): void;
 
   get<T>(propertyName: string): T;
   get(propertyName: string): any;
   set<T>(propertyName: string, value: T): this;
   set(props: Set<any>): this;
-  watch(path: string | string[], callback: WatchCallback, sync?: boolean): WatchHandle;
+  watch(path: string | string[], callback: WatchCallback): WatchHandle;
 
   protected notifyChange(propertyName: string): void;
   protected _get(propertyName: string): any;

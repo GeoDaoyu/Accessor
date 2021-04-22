@@ -1,3 +1,17 @@
+type WatchCallback = (
+  newValue: any,
+  oldValue: any,
+  propertyName: string,
+  target: Accessor
+) => void;
+
+interface WatchHandle extends Object {
+  /**
+   * Removes the watch handle.
+   */
+  remove(): void;
+}
+
 function observe(cls) {
   return new Proxy(cls, {
     construct(target, args) {
@@ -18,19 +32,18 @@ function observe(cls) {
 }
 
 class Accessor {
-  public declaredClass: string;
+  declaredClass: string;
   private _handles: Set<any>;
-  constructor(props) {
-    if (typeof props === 'object') {
-      for (let prop in props) {
-        this[prop] = props[prop];
-      }
+
+  constructor(props: object) {
+    for (let prop in props) {
+      this[prop] = props[prop];
     }
     this.declaredClass = "Accessor";
     this._handles = new Set();
   }
-  get(path) {
-    const dotIndex = path.indexOf('.');
+  get(path: string): any {
+    const dotIndex = path.indexOf(".");
     if (dotIndex !== -1) {
       const key = path.slice(0, dotIndex);
       const value = path.slice(dotIndex + 1);
@@ -38,20 +51,28 @@ class Accessor {
     }
     return this[path];
   }
-  set(path, value) {
-    const dotIndex = path.indexOf('.');
-    if (dotIndex !== -1) {
-      const key = path.slice(0, dotIndex);
-      const childPath = path.slice(dotIndex + 1);
-      if (this[key]) {
-        this[key].set(childPath, value);
+  set(path: string | object, value: any): this {
+    if (typeof path === "string") {
+      const dotIndex = path.indexOf(".");
+      if (dotIndex !== -1) {
+        const key = path.slice(0, dotIndex);
+        const childPath = path.slice(dotIndex + 1);
+        if (this[key]) {
+          this[key].set(childPath, value);
+        }
+      } else {
+        this[path] = value;
       }
     } else {
-      this[path] = value;
+      for (const key in path) {
+        this.set(key, path[key]);
+      }
     }
+
+    return this;
   }
-  watch(path, callback) {
-    const dotIndex = path.indexOf('.');
+  watch(path: string, callback: WatchCallback): WatchHandle {
+    const dotIndex = path.indexOf(".");
     if (dotIndex !== -1) {
       const key = path.slice(0, dotIndex);
       const value = path.slice(dotIndex + 1);
@@ -62,9 +83,10 @@ class Accessor {
       callback,
     };
     this._handles.add(handle);
-    return {
+    const watchHandle = {
       remove: () => this._handles.delete(handle),
     };
+    return watchHandle;
   }
 }
 

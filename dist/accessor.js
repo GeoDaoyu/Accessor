@@ -18,16 +18,14 @@ function observe(cls) {
 }
 class Accessor {
     constructor(props) {
-        if (typeof props === 'object') {
-            for (let prop in props) {
-                this[prop] = props[prop];
-            }
+        for (let prop in props) {
+            this[prop] = props[prop];
         }
         this.declaredClass = "Accessor";
         this._handles = new Set();
     }
     get(path) {
-        const dotIndex = path.indexOf('.');
+        const dotIndex = path.indexOf(".");
         if (dotIndex !== -1) {
             const key = path.slice(0, dotIndex);
             const value = path.slice(dotIndex + 1);
@@ -36,20 +34,28 @@ class Accessor {
         return this[path];
     }
     set(path, value) {
-        const dotIndex = path.indexOf('.');
-        if (dotIndex !== -1) {
-            const key = path.slice(0, dotIndex);
-            const childPath = path.slice(dotIndex + 1);
-            if (this[key]) {
-                this[key].set(childPath, value);
+        if (typeof path === "string") {
+            const dotIndex = path.indexOf(".");
+            if (dotIndex !== -1) {
+                const key = path.slice(0, dotIndex);
+                const childPath = path.slice(dotIndex + 1);
+                if (this[key]) {
+                    this[key].set(childPath, value);
+                }
+            }
+            else {
+                this[path] = value;
             }
         }
         else {
-            this[path] = value;
+            for (const key in path) {
+                this.set(key, path[key]);
+            }
         }
+        return this;
     }
     watch(path, callback) {
-        const dotIndex = path.indexOf('.');
+        const dotIndex = path.indexOf(".");
         if (dotIndex !== -1) {
             const key = path.slice(0, dotIndex);
             const value = path.slice(dotIndex + 1);
@@ -60,9 +66,10 @@ class Accessor {
             callback,
         };
         this._handles.add(handle);
-        return {
+        const watchHandle = {
             remove: () => this._handles.delete(handle),
         };
+        return watchHandle;
     }
 }
 export default observe(Accessor);
