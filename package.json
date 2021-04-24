@@ -5,6 +5,7 @@
   "main": "index.js",
   "module": "dist/index.js",
   "scripts": {
+    "build": "npx tsc",
     "test": "mocha"
   },
   "keywords": [
