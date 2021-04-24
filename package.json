@@ -1,6 +1,6 @@
 {
   "name": "@geodaoyu/accessor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Implement esri/core/Accessor by myself.",
   "main": "index.js",
   "module": "dist/index.js",
