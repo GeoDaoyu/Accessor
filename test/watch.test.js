@@ -160,8 +160,8 @@ describe("#watch()", function () {
     counter.set("number", 2); // +1;
     counter.set({ number: 3 }); // +1;
     counter.set({ number: 3 }); // +1;
-    counter.setNumber(4); //+1;
-    counter.setNumber(4); //+1;
+    counter.setNumber(4); // +1;
+    counter.setNumber(4); // +1;
 
     assert.equal(times, 8);
   });
