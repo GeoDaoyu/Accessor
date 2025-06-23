@@ -119,4 +119,28 @@ describe("#watch()", function () {
     view.zoom = 5;
     assert.deepStrictEqual(result, []);
   });
+  /**
+   * 子类上的方法也可以被监听
+   */
+  it("watch subclass member", function () {
+    class Counter extends Accessor {
+      constructor() {
+        super();
+        this.number = 0;
+      }
+      setNumber = (value) => {
+        this.number = value;
+      };
+    }
+    const counter = new Counter();
+    const result = [];
+    const callback = (newValue, oldValue, propertyName, target) => {
+      result.push(newValue, oldValue, propertyName, target);
+    };
+    counter.number = 4;
+    counter.watch("number", callback);
+    counter.setNumber(5);
+
+    assert.deepStrictEqual(result, [5, 4, "number", counter]);
+  });
 });
