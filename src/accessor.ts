@@ -95,18 +95,15 @@ class Accessor {
       }
     }
     pathArray.forEach((item) => {
-      let handle;
       const dotIndex = item.indexOf(".");
-      if (dotIndex !== -1) {
-        const key = item.slice(0, dotIndex);
-        const value = item.slice(dotIndex + 1);
-        handle = this[key].watch(value, callback);
-      } else {
-        handle = {
-          path: item,
-          callback,
-        };
-      }
+      const handle =
+        dotIndex !== -1
+          ? this[item.slice(0, dotIndex)].watch(
+              item.slice(dotIndex + 1),
+              callback
+            )
+          : { path: item, callback };
+
       handles.push(handle);
       this._handles.add(handle);
     });
