@@ -1,14 +1,8 @@
 # Accessor
 
-Class: `Accessor`
+## Overview
 
 Accessor is an abstract class that facilitates the access to instance properties as well as a mechanism to watch for property changes. Every sub-class of Accessor defines properties that are directly accessible or by using the **get()** and **set()** methods. It is possible to watch for a property changes by using the **watch()** method.
-
-## Installation
-
-``` shell
-npm install @geodaoyu/accessor
-```
 
 ## Property Overview
 
@@ -24,46 +18,13 @@ The name of the class.
 
 ## Method Overview
 
-| Name    | Return Type | Summary                                       | Class    |
-| ------- | ----------- | --------------------------------------------- | -------- |
-| get()   | *           | Gets the value of a property.                 | Accessor |
-| set()   | *           | Sets the value of a property.                 | Accessor |
-| watch() | WatchHandle | Watches for property changes on the instance. | Accessor |
+| Name  | Return Type | Summary                       | Class    |
+| ----- | ----------- | ----------------------------- | -------- |
+| set() | *           | Sets the value of a property. | Accessor |
 
 ### Method Details
 
-<table><tr><td bgcolor=#ddd><b>get(path){*}</b></td></tr></table>
-
-Gets the value of a property.
-
-The name of the property can refer to a property in the instance. 
-
-```javascript
-view.get("scale"); 
-```
-
-It can also be a path to a property deeper in the instance. `get()` returns `undefined` if a property in the path doesn't exist.
-
-```javascript
-var title = map.get("basemap.title");
-
-// equivalent of
-var title = map.basemap && map.basemap.title || undefined;
-```
-
-Parameter:
-
-| **path**                         | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) |
-| -------------------------------- | ------------------------------------------------------------ |
-| The path of the property to get. |                                                              |
-
-Returns:
-
-| Type | Description           |
-| ---- | --------------------- |
-| *    | The property's value. |
-
-<table><tr><td bgcolor=#ddd><b>set(path, value){*}</b></td></tr></table>
+<table><tr><td bgcolor=#ddd><b>set(path, value) {*}</b></td></tr></table>
 
 Sets the value of a property.
 
@@ -102,7 +63,7 @@ view.set({
 });
 
 // currying set
-var updateView = view.set.bind(view);
+const updateView = view.set.bind(view);
 
 updateView({
   center: [-4.4861, 48.3904],
@@ -116,7 +77,7 @@ updateView({
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | The path to the property to set, or an object of key-value pairs. |                                                              |
 | **value**                                                    | *                                                            |
-| *The new value to set on the property.                       |                                                              |
+| The new value to set on the property.                        |                                                              |
 
 Returns:
 
@@ -124,122 +85,189 @@ Returns:
 | ---- | ------------- |
 | *    | The instance. |
 
-<table><tr><td bgcolor=#ddd><b>watch(path, callback){WatchHandle}</b></td></tr></table>
+# reactiveUtils
 
-Watches for property changes on the instance.
+## Overview
 
-Watching for property changes is essential for tracking changes on objects. To start watching for changes on a property, call `watch()` with the property name and a callback function that will execute each time the property changes.
+`reactiveUtils` provide capabilities for observing changes to the state of the SDK's properties, and is an important part of managing your application's life-cycle. State can be observed on a variety of different data types and structures including strings, numbers, arrays, booleans, collections, and objects.
 
-``` javascript
-var handle = mapview.watch("scale", function(newValue, oldValue, propertyName, target) {
-  console.log(propertyName + " changed from " + oldValue + " to " + newValue);
-})
+## Using reactiveUtils
+
+`reactiveUtils` provides five methods that offer different patterns and capabilities for observing state: [on()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#on), [once()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#once), [watch()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#watch), [when()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#when) and [whenOnce()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#whenOnce).
+
+The following is a basic example using [reactiveUtils.watch()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#watch). It demonstrates how to track the Map component [updating](https://developers.arcgis.com/javascript/latest/references/map-components/arcgis-map/#updating) property and then send a message to the console when the property changes. This snippet uses a `getValue` function as an expression that evaluates the `updating` property, and when a change is observed the new value is passed to the callback:
+
 ```
-
-To stop watching for changes, call the `remove()` method on the object that `watch()` returns.
-
-``` javascript
-handle.remove();
-```
-
-It is important to store the resulting objects from `watch()` to properly clean up the references.
-
-```javascript
-var viewHandles = [];
-function setView(view) {
-  // remove the handles for the current view.
-  viewHandles.forEach(function(handle) {
-    handle.remove();
+// Basic example of watching for changes on a boolean property
+const viewElement = document.querySelector("arcgis-map");
+reactiveUtils.watch(
+  // getValue function
+  () => viewElement.updating,
+  // callback
+  (updating) => {
+    console.log(updating)
   });
-  viewHandles.length = 0;
+```
 
-  this.view = view;
 
-  // watch for properties on the newly set view.
-  if (view) {
-    viewHandles.push(
-      view.watch("scale", scaleWatcher);
-    );
-  }
+
+### Working with collections
+
+`reactiveUtils` can be used to observe changes within a collection, such as [Map.allLayers](https://developers.arcgis.com/javascript/latest/api-reference/esri-Map.html#allLayers). Out-of-the-box JavaScript methods such as [`.map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) and [`.filter()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) can be used as expressions to be evaluated in the `getValue` function.
+
+```
+// Watching for changes within a collection
+// whenever a new layer is added to the map
+const viewElement = document.querySelector("arcgis-map");
+reactiveUtils.watch(
+  () => viewElement.map.allLayers.map( layer => layer.id),
+  (ids) => {
+    console.log(`FeatureLayer IDs ${ids}`);
+  });
+```
+
+
+
+### Working with objects
+
+With `reactiveUtils` you can track named object properties through dot notation (e.g. `viewElement.updating`) or through bracket notation (e.g. `viewElement["updating"]`). You can also use the [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) operator (`?.`). This operator simplifies the process of verifying that properties used in the `getValue` function are not `undefined` or `null`.
+
+```
+// Watch for changes in an object using optional chaining
+// whenever the map's extent changes
+const viewElement = document.querySelector("arcgis-map");
+reactiveUtils.watch(
+  () => viewElement?.extent?.xmin,
+  (xmin) => {
+    console.log(`Extent change xmin = ${xmin}`)
+  });
+```
+
+
+
+### WatchHandles and Promises
+
+The [watch()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#watch), [on()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#on) and [when()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#when) methods return a [WatchHandle](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-Accessor.html#WatchHandle). Be sure to remove watch handles when they are no longer needed to avoid memory leaks.
+
+```
+// Use a WatchHandle to stop watching
+const viewElement = document.querySelector("arcgis-map");
+const handle = reactiveUtils.watch(
+  () => viewElement?.extent?.xmin,
+  (xmin) => {
+    console.log(`Extent change xmin = ${xmin}`)
+  });
+
+// In another function
+handle.remove()
+```
+
+The [once()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#once) and [whenOnce()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#whenOnce) methods return a Promise instead of a `WatchHandle`. In some advanced use cases where an API action may take additional time, these methods also offer the option to cancel the async callback via an [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController/signal). Be aware that if the returned Promise is not resolved, it can also result in a memory leak.
+
+```
+// Use an AbortSignal to cancel an async callback
+// during view animation
+const abortController = new AbortController();
+
+// Observe the View's animation state
+reactiveUtils.whenOnce(
+  () => view?.animation, {signal: abortController.signal})
+  .then((animation) => {
+    console.log(`View animation state is ${animation.state}`)
+  });
+
+// Cancel the async callback
+const someFunction = () => {
+  abortController.abort();
 }
-
-setView(mapView);
-setView(null);
 ```
 
-Like `get()` and `set()`, it is possible to watch for a property deep in the object hierarchy by passing a path. If a property in the path doesn't exist the watch callback is called with `undefined`.
 
-``` javascript
-var view = new SceneView({
-  map: new Map({
-    basemap: "streets-vector"
-  })
-});
 
-view.watch("map.basemap.title", function(newValue, oldValue) {
-  console.log("basemap's title changed from " + oldValue + " to " + newValue);
-});
+### Working with truthy values
 
-view.map.basemap = "topo-vector";
-// output: "basemap's title changed from Streets to Topographic"
+The [when()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#when) and [whenOnce()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#whenOnce) methods watch for *truthy* values, these are values that evaluate to `true` in boolean contexts. To learn more about using truthy, visit this [MDN Web doc](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) article. The snippets below use the [Popup.visible](https://developers.arcgis.com/javascript/latest/api-reference/esri-widgets-Popup.html) property, which is a boolean.
 
-view.map = null;
-// output: "basemap's title changed from Topographic to undefined"
+```
+// Observe changes on a boolean property
+const viewElement = document.querySelector("arcgis-map");
+reactiveUtils.when(() => viewElement.popup?.visible, () => console.log("Truthy"));
+reactiveUtils.when(() => !viewElement.popup?.visible, () => console.log("Not truthy"));
+reactiveUtils.when(() => viewElement.popup?.visible === true, () => console.log("True"));
+reactiveUtils.when(() => viewElement.popup?.visible !== undefined, () => console.log("Defined"));
+reactiveUtils.when(() => viewElement.popup?.visible === undefined, () => console.log("Undefined"));
 ```
 
-Pass a comma delimited list of property paths, or an array of property paths, to watch multiple properties with the same callback. Use the third parameter of the callback call to determine what property changed.
+## Method Overview
 
-``` javascript
-view.watch("center, scale, rotation", function(newValue, oldValue, propertyName) {
-  console.log(propertyName + " changed");
-});
+| Name    | Return Type | Summary                                                      | Object        |
+| ------- | ----------- | ------------------------------------------------------------ | ------------- |
+| watch() | WatchHandle | Tracks any properties accessed in the `getValue` function and calls the callback when any of them change. | reactiveUtils |
 
-// equivalent of
-view.watch(["center", "scale", "rotation"], function(newValue, oldValue, propertyName) {
-  console.log(propertyName + " changed");
-});
+### Method Details
+<table><tr><td bgcolor=#ddd><b>watch(getValue, callback, options?){WatchHandle}</b></td></tr></table>
 
-// equivalent of
-var callback = function(newValue, oldValue, propertyName) {
-  console.log(propertyName + " changed");
-}
-view.watch("center", callback);
-view.watch("scale", callback);
-view.watch("rotation", callback);
-```
-
-`Accessor` doesn't call the watch callbacks for a property immediately after its value changes. Instead, when a property's value changes and if that property is watched, `Accessor` schedules a notification which is then processed at a later time. Properties that change frequently like `view.scale` can be watched without having to throttle the callback.
-
-``` javascript
-// Divides the view.scale three times
-view.watch("scale", function(newValue, oldValue) {
-  console.log("view's scale changed from " + oldValue + " to " + newValue);
-});
-console.log("current view scale: " + view.scale);
-view.scale = view.scale / 2;
-view.scale = view.scale / 2;
-view.scale = view.scale / 2;
-console.log("current view scale: " + view.scale);
-
-// output the following:
-// current view scale: 36978595.474472
-// current view scale: 4622324.434309
-// view's scale changed from 36978595.474472 to 4622324.434309
-```
+Tracks any properties accessed in the `getValue` function and calls the callback when any of them change.
 
 Parameters:
 
-| **path**                                                     | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| String[] |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| The property or properties to watch. Multiple properties can be specified as a comma-separated list. |                                                              |
-| **callback**                                                 | watchCallback                                                |
-| The callback to execute when the property value has changed. |                                                              |
+| **getValue**                                                 | ReactiveWatchExpression   |
+| ------------------------------------------------------------ | ------------------------- |
+| Function used to get the current value. All accessed properties will be tracked. |                           |
+| **callback**                                                 | **ReactiveWatchCallback** |
+| The function to call when there are changes.                 |                           |
+| **options**                                                  | **ReactiveWatchOptions**  |
+| Options used to configure how the tracking happens and how the callback is to be called. |                           |
 
 Returns:
 
 | Type        | Description    |
 | ----------- | -------------- |
 | WatchHandle | A watch handle |
+
+Examples
+
+```js
+// Watching for changes in a boolean value
+// Equivalent to watchUtils.watch()
+const viewElement = document.querySelector("arcgis-map");
+reactiveUtils.watch(
+ () => viewElement.popup?.visible,
+ () => {
+   console.log(`Popup visible: ${viewElement.popup.visible}`);
+ });
+// Watching for changes within a Collection
+const viewElement = document.querySelector("arcgis-map");
+reactiveUtils.watch(
+ () => viewElement.map.allLayers.length,
+ () => {
+   console.log(`Layer collection length changed: ${viewElement.map.allLayers.length}`);
+ });
+// Watch for changes in a numerical value.
+// Providing `initial: true` in ReactiveWatchOptions
+// checks immediately after initialization
+// Equivalent to watchUtils.init()
+const viewElement = document.querySelector("arcgis-map");
+reactiveUtils.watch(
+ () => viewElement.zoom,
+ () => {
+   console.log(`zoom changed to ${viewElement.zoom}`);
+ },
+ {
+   initial: true
+ });
+// Watch properties from multiple sources
+const viewElement = document.querySelector("arcgis-map");
+const handle = reactiveUtils.watch(
+ () => [viewElement.stationary, viewElement.zoom],
+ ([stationary, zoom]) => {
+   // Only print the new zoom value when the map component is stationary
+   if(stationary){
+     console.log(`Change in zoom level: ${zoom}`);
+   }
+ }
+);
+```
 
 ## Type Definitions
 
@@ -261,7 +289,7 @@ Parameters:
 
 <table><tr><td bgcolor=#ddd><b>WatchHandle</b> <span>Object</span></td></tr></table>
 
-Represents a watch created when an object invokes **watch()**.
+Represents a watch or event handler which can be removed.
 
 Property:
 
@@ -272,7 +300,7 @@ Property:
 Example:
 
 ``` javascript
-var handle = map.watch('basemap', function(newVal){
+const handle = reactiveUtils.watch(() => map.basemap, (newVal) => {
   // Each time the value of map.basemap changes, it is logged in the console
   console.log("new basemap: ", newVal);
 });
@@ -280,3 +308,5 @@ var handle = map.watch('basemap', function(newVal){
 // When remove() is called on the watch handle, the map no longer watches for changes to basemap
 handle.remove();
 ```
+
+TODO: missing https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#typedefinitions-summary
