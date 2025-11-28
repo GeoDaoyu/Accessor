@@ -17,41 +17,36 @@ interface Handle {
   callback: Function;
 }
 
-/**
- * observe class
- * @param cls class
- * @returns Proxy
- */
-function observe(cls) {
-  return new Proxy(cls, {
-    construct(target, args) {
-      const obj = new target(...args);
-      return new Proxy(obj, {
-        set: (target, key, value, receiver) => {
+class Accessor {
+  declaredClass: string;
+  private _handles: Set<Handle>;
+
+  constructor(props: object = {}) {
+    // 为当前实例创建一个代理
+    const proxy = new Proxy(this, {
+      set: (target, key, value, receiver) => {
+        if (key !== '_handles' && target._handles) {
           const oldValue = target[key];
           target._handles.forEach((handle) => {
             if (handle.path === key) {
               handle.callback(value, oldValue, key, target);
             }
           });
-          return Reflect.set(target, key, value, receiver);
-        },
-      });
-    },
-  });
-}
+        }
+        return Reflect.set(target, key, value, receiver);
+      }
+    });
 
-class Accessor {
-  declaredClass: string;
-  private _handles: Set<Handle>;
-
-  constructor(props: object) {
+    // 初始化属性
     for (let prop in props) {
-      this[prop] = props[prop];
+      proxy[prop] = props[prop];
     }
-    this.declaredClass = "Accessor";
-    this._handles = new Set();
+    proxy.declaredClass = "Accessor";
+    proxy._handles = new Set();
+
+    return proxy;
   }
+  
   get(path: string): any {
     const dotIndex = path.indexOf(".");
     if (dotIndex !== -1) {
@@ -61,6 +56,7 @@ class Accessor {
     }
     return this[path];
   }
+  
   set(path: string | object, value: any): this {
     if (typeof path === "string") {
       const dotIndex = path.indexOf(".");
@@ -81,6 +77,7 @@ class Accessor {
 
     return this;
   }
+  
   watch(path: string | string[], callback: WatchCallback): WatchHandle {
     const handles = [];
     const pathArray = [];
@@ -119,4 +116,4 @@ class Accessor {
   }
 }
 
-export default observe(Accessor);
+export default Accessor;
