@@ -37,7 +37,7 @@ map.set("basemap", "topo-vector");
 map.basemap = "topo-vector";
 
 // currying set
-var updateViewScale = view.set.bind(view, "scale");
+const updateViewScale = view.set.bind(view, "scale");
 updateViewScale(5000);
 ```
 
@@ -271,22 +271,6 @@ const handle = reactiveUtils.watch(
 
 ## Type Definitions
 
-<table><tr><td bgcolor=#ddd><b>watchCallback(newValue, oldValue, propertyName, target)</b></td></tr></table>
-
-Callback to be called when a watched property changes.
-
-Parameters:
-
-| **newValue**                                      | *                                                            |
-| ------------------------------------------------- | ------------------------------------------------------------ |
-| The new value of the watched property.            |                                                              |
-| **oldValue**                                      | *                                                            |
-| The old value of the watched property.            |                                                              |
-| **propertyName**                                  | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) |
-| The property name.                                |                                                              |
-| **target**                                        | Accessor                                                     |
-| The object containing the property being watched. |                                                              |
-
 <table><tr><td bgcolor=#ddd><b>WatchHandle</b> <span>Object</span></td></tr></table>
 
 Represents a watch or event handler which can be removed.
@@ -309,4 +293,69 @@ const handle = reactiveUtils.watch(() => map.basemap, (newVal) => {
 handle.remove();
 ```
 
-TODO: missing https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#typedefinitions-summary
+<table><tr><td bgcolor=#ddd><b>ReactiveEqualityFunction(newValue, oldValue) {Boolean}</b></td></tr></table>
+
+Function used to check whether two values are the same, in which case the watch callback isn't called.
+
+Parameters:
+
+| **newValue**   | *    |
+| -------------- | ---- |
+| The new value. |      |
+| **oldValue**   | *    |
+| The old value. |      |
+
+Returns:
+
+| Type    | Description                                      |
+| ------- | ------------------------------------------------ |
+| Boolean | Whether the new value is equal to the old value. |
+
+<table><tr><td bgcolor=#ddd><b>ReactiveListenerChangeCallback(target?)</b></td></tr></table>
+
+Function used to check whether two values are the same, in which case the watch callback isn't called.
+
+Parameters:
+
+| **target**                                                   | *    |
+| ------------------------------------------------------------ | ---- |
+| The event target to which the listener was added or from which it was removed. |      |
+
+<table><tr><td bgcolor=#ddd><b>ReactiveWatchCallback(newValue, oldValue) {Boolean}</b></td></tr></table>
+
+Function to be called when a value changes.
+
+Parameters:
+
+| **newValue**   | *    |
+| -------------- | ---- |
+| The new value. |      |
+| **oldValue**   | *    |
+| The old value. |      |
+
+<table><tr><td bgcolor=#ddd><b>ReactiveWatchExpression(){*}</b></td></tr></table>
+
+Function which is auto-tracked and should return a value to pass to the ReactiveWatchCallback
+
+Returns:
+
+| Type | Description    |
+| ---- | -------------- |
+| *    | The new value. |
+
+<table><tr><td bgcolor=#ddd><b>ReactiveWatchOptions</b> <span>Object</span></td></tr></table>
+
+Options used to configure how auto-tracking is performed and how the callback should be called.
+
+Property:
+
+| **initial**                                                  | Boolean                      |
+| ------------------------------------------------------------ | ---------------------------- |
+| Default Value:false<br />Whether to fire the callback immediately after initialization, if the necessary conditions are met. |                              |
+| **sync**                                                     | **Boolean**                  |
+| Default Value:false<br />Whether to fire the callback synchronously or on the next tick. |                              |
+| **once**                                                     | **Boolean**                  |
+| Default Value:false<br />Whether to fire the callback only once. |                              |
+| **equals**                                                   | **ReactiveEqualityFunction** |
+| Function used to check whether two values are the same, in which case the callback isn't called. Checks whether two objects, arrays or primitive values are shallow equal, e.g. one level deep. Non-plain objects are considered equal if they are strictly equal (===). |                              |
+
