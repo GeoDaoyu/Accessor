@@ -1,3 +1,3 @@
-import Accessor from './accessor';
+import Accessor from './accessor.js';
 
 export default Accessor;
