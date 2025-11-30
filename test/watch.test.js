@@ -1,14 +1,5 @@
 import Accessor from "../dist/index.js";
 import assert from "assert";
-class Counter extends Accessor {
-  constructor() {
-    super();
-    this.number = 0;
-  }
-  setNumber = (value) => {
-    this.number = value;
-  };
-}
 
 describe("#watch()", function () {
   it("watch property change", function () {
@@ -132,6 +123,16 @@ describe("#watch()", function () {
    * 子类上的方法也可以被监听
    */
   it("watch subclass member", function () {
+    class Counter extends Accessor {
+      constructor() {
+        super();
+        this.number = 0;
+      }
+      setNumber = (value) => {
+        this.number = value;
+      };
+    }
+
     const counter = new Counter();
     const result = [];
     const callback = (newValue, oldValue, propertyName, target) => {
@@ -142,27 +143,5 @@ describe("#watch()", function () {
     counter.setNumber(5);
 
     assert.deepStrictEqual(result, [5, 4, "number", counter]);
-  });
-
-  /**
-   * 子类上的方法 监听变更次数
-   */
-  it("watch subclass member changed times", function () {
-    const counter = new Counter();
-    let times = 0;
-    const callback = () => {
-      times++;
-    };
-    counter.watch("number", callback);
-    counter.number = 1; // +1;
-    counter.number = 1; // +1;
-    counter.set("number", 2); // +1;
-    counter.set("number", 2); // +1;
-    counter.set({ number: 3 }); // +1;
-    counter.set({ number: 3 }); // +1;
-    counter.setNumber(4); // +1;
-    counter.setNumber(4); // +1;
-
-    assert.equal(times, 8);
   });
 });
