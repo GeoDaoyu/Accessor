@@ -1,6 +1,6 @@
 {
   "name": "@geodaoyu/accessor",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "mini @arcgis/core/core/Accessor & @arcgis/core/core/reactiveUtils",
   "main": "index.js",
   "module": "dist/index.js",

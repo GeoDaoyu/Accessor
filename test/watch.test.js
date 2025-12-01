@@ -123,25 +123,25 @@ describe("#watch()", function () {
    * 子类上的方法也可以被监听
    */
   it("watch subclass member", function () {
-    class Counter extends Accessor {
+    class View extends Accessor {
       constructor() {
         super();
-        this.number = 0;
+        this.zoom = 3;
       }
-      setNumber = (value) => {
-        this.number = value;
+      setZoom = (value) => {
+        this.zoom = value;
       };
     }
 
-    const counter = new Counter();
+    const view = new View();
     const result = [];
     const callback = (newValue, oldValue, propertyName, target) => {
       result.push(newValue, oldValue, propertyName, target);
     };
-    counter.number = 4;
-    counter.watch("number", callback);
-    counter.setNumber(5);
+    view.zoom = 4;
+    view.watch("zoom", callback);
+    view.setZoom(5);
 
-    assert.deepStrictEqual(result, [5, 4, "number", counter]);
+    assert.deepStrictEqual(result, [5, 4, "zoom", view]);
   });
 });
