@@ -5,7 +5,7 @@ describe("#set()", function () {
   it("should return 4 when the property is set to 4", function () {
     const view = new Accessor();
     view.set("zoom", 4);
-    assert.strictEqual(view.get("zoom"), 4);
+    assert.strictEqual(view.zoom, 4);
   });
   it("should return 4 when the property is 4", function () {
     const view = new Accessor();
@@ -20,7 +20,7 @@ describe("#set()", function () {
     const basemap = new Accessor();
     map.set("basemap", basemap);
     map.set("basemap.title", "World Topographic Map");
-    assert.strictEqual(map.get("basemap.title"), "World Topographic Map");
+    assert.strictEqual(map.basemap.title, "World Topographic Map");
   });
   /**
    * 设置属性的属性,当属性不存在的时候,不设置
@@ -28,7 +28,7 @@ describe("#set()", function () {
   it("deep path set property which does not exist", function () {
     const map = new Accessor();
     map.set("basemap.title", "World Topographic Map");
-    assert.strictEqual(map.get("basemap.title"), undefined);
+    assert.strictEqual(map.basemap.title, undefined);
   });
   /**
    * 可以通过对象的形式批量设置属性
@@ -39,7 +39,7 @@ describe("#set()", function () {
       center: [-4.4861, 48.3904],
       scale: 5000,
     });
-    assert.strictEqual(view.get("scale"), 5000);
+    assert.strictEqual(view.scale, 5000);
   });
   /**
    * 柯里化
@@ -51,6 +51,6 @@ describe("#set()", function () {
       center: [-4.4861, 48.3904],
       scale: 5000,
     });
-    assert.strictEqual(view.get("scale"), 5000);
+    assert.strictEqual(view.scale, 5000);
   });
 });

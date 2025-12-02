@@ -2,7 +2,7 @@ type WatchCallback = (
   newValue: any,
   oldValue: any,
   propertyName: string,
-  target: Accessor
+  target: Accessor,
 ) => void;
 
 interface WatchHandle extends Object {
@@ -25,7 +25,7 @@ class Accessor {
     // 为当前实例创建一个代理
     const proxy = new Proxy(this, {
       set: (target, key, value, receiver) => {
-        if (key !== '_handles' && target._handles) {
+        if (key !== "_handles" && target._handles) {
           const oldValue = target[key];
           target._handles.forEach((handle) => {
             if (handle.path === key) {
@@ -34,7 +34,7 @@ class Accessor {
           });
         }
         return Reflect.set(target, key, value, receiver);
-      }
+      },
     });
 
     // 初始化属性
@@ -46,17 +46,7 @@ class Accessor {
 
     return proxy;
   }
-  
-  get(path: string): any {
-    const dotIndex = path.indexOf(".");
-    if (dotIndex !== -1) {
-      const key = path.slice(0, dotIndex);
-      const value = path.slice(dotIndex + 1);
-      return this[key] && this[key].get(value);
-    }
-    return this[path];
-  }
-  
+
   set(path: string | object, value: any): this {
     if (typeof path === "string") {
       const dotIndex = path.indexOf(".");
@@ -77,7 +67,7 @@ class Accessor {
 
     return this;
   }
-  
+
   watch(path: string | string[], callback: WatchCallback): WatchHandle {
     const handles = [];
     const pathArray = [];
@@ -97,7 +87,7 @@ class Accessor {
         dotIndex !== -1
           ? this[item.slice(0, dotIndex)].watch(
               item.slice(dotIndex + 1),
-              callback
+              callback,
             )
           : { path: item, callback };
 
