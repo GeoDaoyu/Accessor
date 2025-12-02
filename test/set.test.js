@@ -28,7 +28,7 @@ describe("#set()", function () {
   it("deep path set property which does not exist", function () {
     const map = new Accessor();
     map.set("basemap.title", "World Topographic Map");
-    assert.strictEqual(map.basemap.title, undefined);
+    assert.strictEqual(map.basemap?.title, undefined);
   });
   /**
    * 可以通过对象的形式批量设置属性
