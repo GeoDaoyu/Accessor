@@ -45,7 +45,7 @@ export function createEffect(fn) {
 
   const running = {
     execute,
-    dependencies: new Set()
+    dependencies: new Set(),
   };
 
   execute();

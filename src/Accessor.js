@@ -9,7 +9,7 @@ class Accessor {
     }
 
     const proxy = new Proxy(this, {
-      get: (target, key, receiver) => {
+      get: (_, key) => {
         if (this.signals.has(key)) {
           const [getter] = this.signals.get(key);
           return getter();
@@ -17,13 +17,13 @@ class Accessor {
         return undefined;
       },
 
-      set: (target, key, value, receiver) => {
-        if (!this.signals.has(key)) {
-          const [getter, setter] = createSignal(value);
-          this.signals.set(key, [getter, setter]);
-        } else {
+      set: (_, key, value) => {
+        if (this.signals.has(key)) {
           const [_, setter] = this.signals.get(key);
           setter(value);
+        } else {
+          const [getter, setter] = createSignal(value);
+          this.signals.set(key, [getter, setter]);
         }
         return true;
       },
