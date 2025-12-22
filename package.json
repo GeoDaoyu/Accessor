@@ -2,11 +2,12 @@
   "name": "@geodaoyu/accessor",
   "version": "2.0.1",
   "description": "mini @arcgis/core/core/Accessor & @arcgis/core/core/reactiveUtils",
-  "main": "index.js",
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
-    "build": "npx tsc",
-    "test": "mocha"
+    "start": "vite",
+    "build": "vite build",
+    "test": "vitest"
   },
   "keywords": [
     "Accessor",
@@ -28,7 +29,7 @@
     "url": "https://github.com/GeoDaoyu/Accessor.git"
   },
   "devDependencies": {
-    "mocha": "^11.7.1",
-    "typescript": "^5.8.3"
+    "vite": "^7.3.0",
+    "vitest": "^1.0.0"
   }
 }
