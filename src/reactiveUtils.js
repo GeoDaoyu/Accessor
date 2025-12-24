@@ -6,8 +6,19 @@ export default {
   watch(getValue, callback) {
     const oldValue = getValue();
     createEffect(() => {
-      if (!equality(getValue(), oldValue)) {
-        callback(getValue(), oldValue);
+      if (Array.isArray(oldValue)) {
+        if (
+          getValue().length === oldValue.length &&
+          getValue().every((val, index) => val === oldValue[index])
+        ) {
+          return;
+        } else {
+          callback(getValue(), oldValue);
+        }
+      } else {
+        if (!equality(getValue(), oldValue)) {
+          callback(getValue(), oldValue);
+        }
       }
     });
   },
