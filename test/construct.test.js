@@ -1,24 +1,24 @@
-import Accessor from '../dist/index.js';
-import assert from 'assert';
+import { describe, it, expect } from "vitest";
+import Accessor from "../src/Accessor.js";
 
-describe('#constructor()', function() {
-  it('typeof accessor should be "object"', function() {
+describe("#constructor()", () => {
+  it('typeof accessor should be "object"', () => {
     const accessor = new Accessor();
-    assert.strictEqual(typeof accessor, 'object');
+    expect(typeof accessor).toBe("object");
   });
   /**
    * 可以通过 对象的形式给类 赋初值
    */
-  it('accessor\'s props can be an object', function() {
+  it("accessor's props can be an object", () => {
     const view = new Accessor({
       zoom: 4,
     });
-    assert.strictEqual(view.zoom, 4);
+    expect(view.zoom).toBe(4);
   });
   /**
    * 子类可以继承Accessor
    */
-  it('subclass can extend from Accessor', function() {
+  it("subclass can extend from Accessor", () => {
     class View extends Accessor {
       constructor() {
         super();
@@ -26,6 +26,6 @@ describe('#constructor()', function() {
       }
     }
     const view = new View();
-    assert.strictEqual(view instanceof Accessor, true);
+    expect(view instanceof Accessor).toBe(true);
   });
 });

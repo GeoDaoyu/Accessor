@@ -1,0 +1,3 @@
+# philosophy
+
+Accessor = Proxy + Signal
