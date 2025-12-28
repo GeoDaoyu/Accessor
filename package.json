@@ -7,7 +7,7 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "test": "vitest"
+    "test": "vitest --run"
   },
   "keywords": [
     "Accessor",
