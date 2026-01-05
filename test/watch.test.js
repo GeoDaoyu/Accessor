@@ -54,8 +54,7 @@ describe("#watch()", () => {
     view.zoom = 4;
     const handle = reactiveUtils.watch(() => view.zoom, callback);
     view.zoom = 5;
-    // handle.remove();
-    handle.stop();
+    handle.remove();
     view.zoom = 6;
   });
 

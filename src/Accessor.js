@@ -1,4 +1,4 @@
-import { ref, watch, reactive } from "@vue/reactivity";
+import { reactive } from "@vue/reactivity";
 
 class Accessor {
   constructor(properties) {
