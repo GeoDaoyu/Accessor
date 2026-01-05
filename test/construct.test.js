@@ -7,7 +7,7 @@ describe("#constructor()", () => {
     expect(typeof accessor).toBe("object");
   });
   /**
-   * 可以通过 对象的形式给类 赋初值
+   * 可以通过对象的形式给类赋初值
    */
   it("accessor's props can be an object", () => {
     const view = new Accessor({

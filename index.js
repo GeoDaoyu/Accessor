@@ -1,12 +1,13 @@
-import reactiveUtils from "./src/reactiveUtils.js";
-import Accessor from "./src/Accessor.js";
+import { ref, watch, reactive } from "@vue/reactivity";
+import Accessor from "./src/Accessor";
 
-const o = new Accessor({ count: 5 });
-o.count = 0;
-reactiveUtils.watch(
-  () => o.count,
+const view = new Accessor({ zoom: 1 });
+
+view.zoom = 2;
+watch(
+  () => view.zoom,
   (newValue, oldValue) => {
     console.log(newValue, oldValue);
-  }
+  },
 );
-o.count = 7;
+view.zoom = 3;

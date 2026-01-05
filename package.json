@@ -31,5 +31,8 @@
   "devDependencies": {
     "vite": "^7.3.0",
     "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "@vue/reactivity": "^3.5.26"
   }
 }
