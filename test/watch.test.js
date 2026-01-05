@@ -45,6 +45,32 @@ describe("#watch()", () => {
     expect(result).toEqual([11, false, 12, false, 11, true, 11, false]);
   });
 
+  it("remove watch handle", function () {
+    const callback = (newValue, oldValue) => {
+      expect(newValue).toBe(5);
+      expect(oldValue).toBe(4);
+    };
+    const view = new Accessor();
+    view.zoom = 4;
+    const handle = reactiveUtils.watch(() => view.zoom, callback);
+    view.zoom = 5;
+    // handle.remove();
+    handle.stop();
+    view.zoom = 6;
+  });
+
+  it("only watch registered property", function () {
+    const callback = (newValue, oldValue) => {
+      expect(newValue).toBe(6);
+      expect(oldValue).toBe(5);
+    };
+    const view = new Accessor();
+    view.zoom = 4;
+    view.zoom = 5;
+    reactiveUtils.watch(() => view.zoom, callback);
+    view.zoom = 6;
+  });
+
   it("watch subclass member", function () {
     class View extends Accessor {
       constructor() {
@@ -55,7 +81,6 @@ describe("#watch()", () => {
         this.zoom = value;
       };
     }
-
     const view = new View();
     const callback = (newValue, oldValue) => {
       expect(newValue).toBe(5);
