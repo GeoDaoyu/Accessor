@@ -73,11 +73,10 @@ updateView({
 
  Parameters:
 
-| **path**                                                     | String | Object |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| The path to the property to set, or an object of key-value pairs. |                                                              |
-| **value**                                                    | *                                                            |
-| The new value to set on the property.                        |                                                              |
+| Name                                                         | Type                                                         | Summary                                                           | Class     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------      |---------- |
+| path                                                         | String                                                       | The path to the property to set, or an object of key-value pairs. | Object    |
+| value                                                        | *                                                            | The new value to set on the property.                             | *         |
 
 Returns:
 
