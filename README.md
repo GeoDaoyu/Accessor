@@ -93,9 +93,9 @@ Returns:
 
 ## Using reactiveUtils
 
-`reactiveUtils` provides five methods that offer different patterns and capabilities for observing state: [on()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#on), [once()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#once), [watch()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#watch), [when()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#when) and [whenOnce()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#whenOnce).
+`reactiveUtils` provides five methods that offer different patterns and capabilities for observing state.
 
-The following is a basic example using [reactiveUtils.watch()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#watch). It demonstrates how to track the Map component [updating](https://developers.arcgis.com/javascript/latest/references/map-components/arcgis-map/#updating) property and then send a message to the console when the property changes. This snippet uses a `getValue` function as an expression that evaluates the `updating` property, and when a change is observed the new value is passed to the callback:
+The following is a basic example using reactiveUtils.It demonstrates how to track the Map component updating property and then send a message to the console when the property changes. This snippet uses a `getValue` function as an expression that evaluates the `updating` property, and when a change is observed the new value is passed to the callback:
 
 ```
 // Basic example of watching for changes on a boolean property
@@ -147,7 +147,7 @@ reactiveUtils.watch(
 
 ### WatchHandles and Promises
 
-The [watch()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#watch), [on()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#on) and [when()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#when) methods return a [WatchHandle](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-Accessor.html#WatchHandle). Be sure to remove watch handles when they are no longer needed to avoid memory leaks.
+The watch(), on() and when() methods return a WatchHandle. Be sure to remove watch handles when they are no longer needed to avoid memory leaks.
 
 ```
 // Use a WatchHandle to stop watching
