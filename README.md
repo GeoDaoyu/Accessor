@@ -95,7 +95,7 @@ Returns:
 
 `reactiveUtils` provides five methods that offer different patterns and capabilities for observing state.
 
-The following is a basic example using reactiveUtils.It demonstrates how to track the Map component updating property and then send a message to the console when the property changes. This snippet uses a `getValue` function as an expression that evaluates the `updating` property, and when a change is observed the new value is passed to the callback:
+The following is a basic example using reactiveUtils.watch(). It demonstrates how to track the Map component updating property and then send a message to the console when the property changes. This snippet uses a `getValue` function as an expression that evaluates the `updating` property, and when a change is observed the new value is passed to the callback:
 
 ```
 // Basic example of watching for changes on a boolean property
