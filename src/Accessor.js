@@ -7,22 +7,24 @@ class Accessor {
   }
 
   set(path, value) {
-    if (typeof path === "string") {
-      const dotIndex = path.indexOf(".");
-      if (dotIndex !== -1) {
-        const key = path.slice(0, dotIndex);
-        const childPath = path.slice(dotIndex + 1);
-        if (this[key]) {
-          this[key].set(childPath, value);
-        }
+    const setter = (key, value) => {
+      this[key] = value;
+    };
+    const setByString = (str, value) => {
+      const [key, ...rest] = str.split(".");
+      if (rest.length === 0) {
+        setter(key, value);
       } else {
-        this[path] = value;
+        this[key]?.set(rest.join("."), value);
       }
-    }
-    if (typeof path === "object") {
-      for (const key in path) {
-        this.set(key, path[key]);
-      }
+    };
+    const setByObject = (obj) => {
+      Object.entries(obj).forEach(([key, value]) => setter(key, value));
+    };
+    if (typeof path === "string") {
+      setByString(path, value);
+    } else if (typeof path === "object") {
+      setByObject(path);
     }
     return this;
   }
