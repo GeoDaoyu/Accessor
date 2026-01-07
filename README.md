@@ -185,7 +185,7 @@ const someFunction = () => {
 
 ### Working with truthy values
 
-The [when()] and [whenOnce()] methods watch for *truthy* values, these are values that evaluate to `true` in boolean contexts. To learn more about using truthy, visit this `MDN Web doc`(https://developer.mozilla.org/en-US/docs/Glossary/Truthy) article. The snippets below use the `Popup.visible`(https://developers.arcgis.com/javascript/latest/api-reference/esri-widgets-Popup.html) property, which is a boolean.
+The `when()` and `whenOnce()` methods watch for *truthy* values, these are values that evaluate to `true` in boolean contexts. The snippets below use the `Popup.visible` property, which is a boolean.
 
 ```
 // Observe changes on a boolean property
