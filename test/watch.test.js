@@ -89,4 +89,18 @@ describe("#watch()", () => {
     reactiveUtils.watch(() => view.zoom, callback);
     view.setZoom(5);
   });
+
+  it("working with collections", function () {
+    const map = new Accessor({
+      allLayers: [],
+    });
+    const layer = new Accessor({ id: 0 });
+    reactiveUtils.watch(
+      () => map.allLayers.map((layer) => layer.id),
+      (ids) => {
+        expect(ids).toEqual([0]);
+      },
+    );
+    map.allLayers.push(layer);
+  });
 });
