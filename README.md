@@ -8,7 +8,7 @@ Accessor is an abstract class that facilitates the access to instance properties
 
 | Name          | Type                                                         | Summary                | Class    |
 | ------------- | ------------------------------------------------------------ | ---------------------- | -------- |
-| declaredClass | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The name of the class. | Accessor |
+| declaredClass | **String** | The name of the class. | Accessor |
 
 ### Property Details
 
@@ -73,11 +73,10 @@ updateView({
 
  Parameters:
 
-| **path**                                                     | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| The path to the property to set, or an object of key-value pairs. |                                                              |
-| **value**                                                    | *                                                            |
-| The new value to set on the property.                        |                                                              |
+| Name                                                         | Type                                                         | Summary                                                           | Class     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------      |---------- |
+| path                                                         | String                                                       | The path to the property to set, or an object of key-value pairs. | Object    |
+| value                                                        | *                                                            | The new value to set on the property.                             | *         |
 
 Returns:
 
@@ -93,9 +92,9 @@ Returns:
 
 ## Using reactiveUtils
 
-`reactiveUtils` provides five methods that offer different patterns and capabilities for observing state.
+`reactiveUtils` provides five methods that offer different patterns and capabilities for observing state: `on()`, `once()`, `watch()`, `when()` and `whenOnce()`.
 
-The following is a basic example using reactiveUtils.watch(). It demonstrates how to track the Map component updating property and then send a message to the console when the property changes. This snippet uses a `getValue` function as an expression that evaluates the `updating` property, and when a change is observed the new value is passed to the callback:
+The following is a basic example using `reactiveUtils.watch()`. It demonstrates how to track the Map component `updating` property and then send a message to the console when the property changes. This snippet uses a `getValue` function as an expression that evaluates the `updating` property, and when a change is observed the new value is passed to the callback:
 
 ```
 // Basic example of watching for changes on a boolean property
@@ -113,7 +112,7 @@ reactiveUtils.watch(
 
 ### Working with collections
 
-`reactiveUtils` can be used to observe changes within a collection, such as [Map.allLayers](https://developers.arcgis.com/javascript/latest/api-reference/esri-Map.html#allLayers). Out-of-the-box JavaScript methods such as [`.map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) and [`.filter()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) can be used as expressions to be evaluated in the `getValue` function.
+`reactiveUtils` can be used to observe changes within a collection, such as `Map.allLayers`. Out-of-the-box JavaScript methods such as `.map()` and `.filter()` can be used as expressions to be evaluated in the `getValue` function.
 
 ```
 // Watching for changes within a collection
@@ -130,7 +129,7 @@ reactiveUtils.watch(
 
 ### Working with objects
 
-With `reactiveUtils` you can track named object properties through dot notation (e.g. `viewElement.updating`) or through bracket notation (e.g. `viewElement["updating"]`). You can also use the [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) operator (`?.`). This operator simplifies the process of verifying that properties used in the `getValue` function are not `undefined` or `null`.
+With `reactiveUtils` you can track named object properties through dot notation (e.g. `viewElement.updating`) or through bracket notation (e.g. `viewElement["updating"]`). You can also use the `optional chaining` operator (`?.`). This operator simplifies the process of verifying that properties used in the `getValue` function are not `undefined` or `null`.
 
 ```
 // Watch for changes in an object using optional chaining
@@ -147,7 +146,7 @@ reactiveUtils.watch(
 
 ### WatchHandles and Promises
 
-The watch(), on() and when() methods return a WatchHandle. Be sure to remove watch handles when they are no longer needed to avoid memory leaks.
+The `watch()`, `on()` and `when()` methods return a `WatchHandle`. Be sure to remove watch handles when they are no longer needed to avoid memory leaks.
 
 ```
 // Use a WatchHandle to stop watching
@@ -162,7 +161,7 @@ const handle = reactiveUtils.watch(
 handle.remove()
 ```
 
-The [once()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#once) and [whenOnce()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#whenOnce) methods return a Promise instead of a `WatchHandle`. In some advanced use cases where an API action may take additional time, these methods also offer the option to cancel the async callback via an [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController/signal). Be aware that if the returned Promise is not resolved, it can also result in a memory leak.
+The `once()` and `whenOnce()` methods return a Promise instead of a `WatchHandle`. In some advanced use cases where an API action may take additional time, these methods also offer the option to cancel the async callback via an `AbortSignal`. Be aware that if the returned Promise is not resolved, it can also result in a memory leak.
 
 ```
 // Use an AbortSignal to cancel an async callback
@@ -186,7 +185,7 @@ const someFunction = () => {
 
 ### Working with truthy values
 
-The [when()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#when) and [whenOnce()](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-reactiveUtils.html#whenOnce) methods watch for *truthy* values, these are values that evaluate to `true` in boolean contexts. To learn more about using truthy, visit this [MDN Web doc](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) article. The snippets below use the [Popup.visible](https://developers.arcgis.com/javascript/latest/api-reference/esri-widgets-Popup.html) property, which is a boolean.
+The `when()` and `whenOnce()` methods watch for *truthy* values, these are values that evaluate to `true` in boolean contexts. The snippets below use the `Popup.visible` property, which is a boolean.
 
 ```
 // Observe changes on a boolean property
@@ -277,7 +276,7 @@ Represents a watch or event handler which can be removed.
 
 Property:
 
-| **remove**                | [Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function) |
+| **remove**                | [Function] |
 | ------------------------- | ------------------------------------------------------------ |
 | Removes the watch handle. |                                                              |
 
