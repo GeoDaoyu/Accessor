@@ -92,7 +92,7 @@ Returns:
 
 ## Using reactiveUtils
 
-`reactiveUtils` provides five methods that offer different patterns and capabilities for observing state: `on()`, `once()`, `watch()`, `when()` and `whenOnce()`.
+`reactiveUtils` provides five methods that offer different patterns and capabilities for observing state:  `once()`, `watch()`, `when()` and `whenOnce()`.
 
 The following is a basic example using `reactiveUtils.watch()`. It demonstrates how to track the Map component `updating` property and then send a message to the console when the property changes. This snippet uses a `getValue` function as an expression that evaluates the `updating` property, and when a change is observed the new value is passed to the callback:
 
@@ -146,7 +146,7 @@ reactiveUtils.watch(
 
 ### WatchHandles and Promises
 
-The `watch()`, `on()` and `when()` methods return a `WatchHandle`. Be sure to remove watch handles when they are no longer needed to avoid memory leaks.
+The `watch()` and `when()` methods return a `WatchHandle`. Be sure to remove watch handles when they are no longer needed to avoid memory leaks.
 
 ```
 // Use a WatchHandle to stop watching
@@ -276,7 +276,7 @@ Represents a watch or event handler which can be removed.
 
 Property:
 
-| **remove**                | [Function] |
+| **remove**                | Function |
 | ------------------------- | ------------------------------------------------------------ |
 | Removes the watch handle. |                                                              |
 
