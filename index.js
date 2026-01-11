@@ -1,13 +1,16 @@
-import { ref, watch, reactive } from "@vue/reactivity";
 import Accessor from "./src/Accessor";
+import reactiveUtils from "./src/reactiveUtils";
 
-const view = new Accessor({ zoom: 1 });
-
-view.zoom = 2;
-watch(
-  () => view.zoom,
-  (newValue, oldValue) => {
-    console.log(newValue, oldValue);
-  },
-);
-view.zoom = 3;
+const map = new Accessor({
+  allLayers: [],
+});
+const layer = new Accessor({ id: 0 });
+reactiveUtils
+  .once(() => map?.allLayers?.length > 2)
+  .then((value) => {
+    console.log(value);
+  });
+map.allLayers.push(layer);
+map.allLayers.push(layer);
+map.allLayers.push(layer);
+map.allLayers.push(layer);

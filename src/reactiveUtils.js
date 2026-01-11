@@ -8,4 +8,15 @@ export default {
       remove: handle.stop,
     };
   },
+  once: (getValue) => {
+    return new Promise((resolve) => {
+      const handle = watch(getValue, (value) => {
+        debugger;
+        if (value) {
+          resolve(value);
+          handle.stop();
+        }
+      });
+    });
+  },
 };
