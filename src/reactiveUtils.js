@@ -11,12 +11,22 @@ export default {
   once: (getValue) => {
     return new Promise((resolve) => {
       const handle = watch(getValue, (value) => {
-        debugger;
         if (value) {
           resolve(value);
           handle.stop();
         }
       });
     });
+  },
+  when: (getValue, callback) => {
+    const handle = watch(getValue, (value) => {
+      if (getValue) {
+        callback(value);
+      }
+    });
+    return {
+      ...handle,
+      remove: handle.stop,
+    };
   },
 };
