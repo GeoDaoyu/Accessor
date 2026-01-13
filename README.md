@@ -202,6 +202,8 @@ reactiveUtils.when(() => viewElement.popup?.visible === undefined, () => console
 | Name    | Return Type | Summary                                                      | Object        |
 | ------- | ----------- | ------------------------------------------------------------ | ------------- |
 | watch() | WatchHandle | Tracks any properties accessed in the `getValue` function and calls the callback when any of them change. | reactiveUtils |
+| once()  | Promise     | Tracks any properties being evaluated by the `getValue` function. | reactiveUtils |
+| when()  | WatchHandle | Watches the value returned by the `getValue` function and calls the callback when it becomes truthy. | reactiveUtils |
 
 ### Method Details
 <table><tr><td bgcolor=#ddd><b>watch(getValue, callback, options?){WatchHandle}</b></td></tr></table>
@@ -267,7 +269,102 @@ const handle = reactiveUtils.watch(
  }
 );
 ```
+<table><tr><td bgcolor=#ddd><b>once(getTarget, signal?){Promise}</b></td></tr></table>
 
+Tracks any properties being evaluated by the `getValue` function. When `getValue` changes, it returns a promise containing the value. This method only tracks a single change.
+
+Parameters:
+
+| **getValue**                                                 | ReactiveWatchExpression              |
+| ------------------------------------------------------------ | ------------------------------------ |
+| Expression to be tracked.                                    |                                      |
+| **signal**                                                   | **AbortSignal \| null \| undefined** |
+| Abort signal which can be used to cancel the promise from resolving. |                                      |
+
+Returns:
+
+| Type    | Description                                                  |
+| ------- | ------------------------------------------------------------ |
+| Promise | A promise which resolves when the tracked expression changes. |
+
+Examples
+
+```js
+// Observe the first time a property equals a specific string value
+// Equivalent to watchUtils.once()
+reactiveUtils.once(
+  () => featureLayer.loadStatus === "loaded")
+  .then(() => {
+    console.log("featureLayer loadStatus is loaded.");
+  });
+// Use a comparison operator to observe a first time
+// difference in numerical values
+const viewElement = document.querySelector("arcgis-map");
+const someFunction = async () => {
+  await reactiveUtils.once(() => viewElement.zoom > 20);
+  console.log("Zoom level is greater than 20!");
+}
+// Use a comparison operator and optional chaining to observe a
+// first time difference in numerical values.
+reactiveUtils.once(
+  () => map?.allLayers?.length > 2)
+  .then((value) => {
+    console.log(`The map now has ${value} layers.`);
+  });
+```
+<table><tr><td bgcolor=#ddd><b>when(getValue, callback, options?){WatchHandle}</b></td></tr></table>
+
+Watches the value returned by the `getValue` function and calls the callback when it becomes truthy.
+
+Parameters:
+
+| **getValue**                                                 | ReactiveWatchExpression   |
+| ------------------------------------------------------------ | ------------------------- |
+| Function used to get the current value. All accessed properties will be tracked. |                           |
+| **callback**                                                 | **ReactiveWatchCallback** |
+| The function to call when there are changes.                 |                           |
+| **options**                                                  | **ReactiveWatchOptions**  |
+| Options used to configure how the tracking happens and how the callback is to be called. |                           |
+
+Returns:
+
+| Type        | Description    |
+| ----------- | -------------- |
+| WatchHandle | A watch handle |
+
+Examples
+
+```js
+// Observe when a boolean property becomes not truthy
+// Equivalent to watchUtils.whenFalse()
+reactiveUtils.when(
+  () => !layerView.updating,
+  () => {
+    console.log("LayerView finished updating.");
+  });
+// Observe when a boolean property becomes true
+// Equivalent to watchUtils.whenTrue()
+const viewElement = document.querySelector("arcgis-map");
+reactiveUtils.when(
+  () => viewElement?.stationary === true,
+  async () => {
+    console.log("User is no longer interacting with the map");
+    await drawBuffer();
+  });
+// Observe a boolean property for truthiness.
+// Providing `once: true` in ReactiveWatchOptions
+// only fires the callback once
+// Equivalent to watchUtils.whenFalseOnce()
+const featuresComponent = document.querySelector("arcgis-features");
+reactiveUtils.when(
+  () => !featuresComponent.closed,
+  () => {
+    console.log(`The features component is closed: ${featuresComponent.closed}`);
+  },
+  {
+    once: true
+  });
+```
 ## Type Definitions
 
 <table><tr><td bgcolor=#ddd><b>WatchHandle</b> <span>Object</span></td></tr></table>
