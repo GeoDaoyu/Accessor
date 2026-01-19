@@ -29,4 +29,14 @@ export default {
       remove: handle.stop,
     };
   },
+  whenOnce: (getValue) => {
+    return new Promise((resolve) => {
+      const handle = watch(getValue, (value) => {
+        if (value) {
+          resolve(value);
+          handle.stop();
+        }
+      });
+    });
+  },
 };
