@@ -2,8 +2,15 @@
   "name": "@geodaoyu/accessor",
   "version": "3.0.1",
   "description": "mini @arcgis/core/core/Accessor & @arcgis/core/core/reactiveUtils",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "type": "module",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
+    }
+  },
   "scripts": {
     "start": "vite",
     "build": "vite build",
@@ -17,10 +24,9 @@
   ],
   "author": "GeoDaoyu",
   "license": "MIT",
-  "type": "module",
   "files": [
-    "dist/**/*",
-    "src/**/*",
+    "dist",
+    "src",
     "README.md",
     "LICENSE"
   ],
